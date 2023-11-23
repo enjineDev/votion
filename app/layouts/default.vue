@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { useThemeStore } from '../stores/theme'
 import { useUserStore } from '../stores/user'
-import { useClientsStore } from '../stores/clients'
-import { useCartStore } from '../stores/cart'
-import { useProductsStore } from '../stores/products'
-import { useCategoriesStore } from '../stores/categories'
 import { useNotificationStore } from '../stores/notifications'
 
 const route = useRoute()
@@ -26,10 +22,6 @@ const displayY = computed({
 
 const themeStore = useThemeStore()
 const userStore = useUserStore()
-const clientsStore = useClientsStore()
-const cartStore = useCartStore()
-const productsStore = useProductsStore()
-const categoriesStore = useCategoriesStore()
 const notificationStore = useNotificationStore()
 
 // Cookies
@@ -68,10 +60,6 @@ router.afterEach(() => {
     activeSidebar.value = false
   }
 })
-
-// Password Protection
-const pw = 'crowned'
-const enterPW = ref('')
 
 const lockedScreen = ref(true)
 const unlockScreen = () => {
@@ -140,9 +128,6 @@ const nuxtApp = useNuxtApp()
 
 onBeforeMount(async () => {
   // window.addEventListener("scroll", onScroll)
-  await categoriesStore.fetchCategories()
-  await productsStore.fetchProducts()
-  await clientsStore.fetchClients()
   //
   // if (route.path.startsWith('/admin') && !productsStore.initialized) {
   //   await productsStore.init()
@@ -153,8 +138,6 @@ onBeforeMount(async () => {
 
 onMounted(() => {
   nuxtApp.hook("page:finish", () => {
-    console.log("page:finish");
-
     window.scrollTo(0, 0)
   })
 });
@@ -187,7 +170,7 @@ onMounted(() => {
         <span>{{ notification.msg }}</span>
       </div>
     </div>
-    
+
     <div class="w-full">
       <!-- Navbar -->
       <div class="flex flex-col justify-center items-center w-full mb-4 fixed z-40 z-50 w-full" :class="{ 'bg-none': route.path === '/shop' }">
@@ -195,46 +178,35 @@ onMounted(() => {
 
           <!-- Navbar Start -->
           <div class="navbar-start">
+            <NuxtLink class="btn btn-circle bg-base-300 normal-case text-xl font-thin flex justify-center" to="/" v-if="!searchbar">
+              <!-- <img class="h-12" :src="`/${(themeStore.colorMode.preference === 'dark') ? 'logo.png' : 'logo_dark.png' }`" alt="The Crowned Lion"> -->
+              📝
+            </NuxtLink>
             <!-- Menu -->
             <!-- Mobile visible Sidebar Button -->
-            <button class="btn btn-circle btn-ghost" :class="(status === 'authenticated') ? 'block' : 'hidden'" @click="toggleSidebar()">
+            <!-- <button class="btn btn-circle btn-ghost" :class="(status === 'authenticated') ? 'block' : 'hidden'" @click="toggleSidebar()">
               <label tabindex="0" class="btn btn-ghost btn-circle">
                 <svg v-if="!activeSidebar" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-panel-right-close"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="15" x2="15" y1="3" y2="21"/><path d="m8 9 3 3-3 3"/></svg>
                 <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-panel-left-close"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M9 3v18"/><path d="m16 15-3-3 3-3"/></svg>
               </label>
-            </button>
+            </button> -->
 
             <!-- Dropdown Mega Menu -->
-            <div class="">
+            <!-- <div class="">
               <label tabindex="0" class="btn btn-ghost btn-circle" @click="activateSubmenu()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
               </label>
-
-              <!-- <ul class="dropdown-content relative flex flex-wrap bg-base-100/70 backdrop-blur-xl menu xl:menu-horizontal w-[720px] rounded border border-base-100 mt-16">
-                <li class="bg-base-100/50 backdrop-blur-xl m-1 rounded flex-1" v-for="category in categoriesStore.categories">
-                  <NuxtLink :to="`/shop/${category.slug}`">
-                    <img class="w-12 h-12 rounded" :src="'/uploads/' + category.image"/>
-                    {{ category.name }}
-                  </NuxtLink>
-                  <ul v-for="subcategory in category.subcategories">
-                    <li><NuxtLink :to="`/shop/${category.slug}/${subcategory}`">{{ subcategory }}</NuxtLink></li>
-                  </ul>
-                </li>
-              </ul> -->
-            </div>
+            </div> -->
 
             <!-- Search Button -->
-            <button class="btn btn-ghost btn-circle w-12" @click="activateSearchBar()">
+            <!-- <button class="btn btn-ghost btn-circle w-12" @click="activateSearchBar()">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            </button>
+            </button> -->
           </div>
 
           <!-- Navbar Center -->
           <div class="navbar-center md:w-2/3 flex justify-center">
             <searchbar v-if="searchbar"/>
-            <NuxtLink class=" btn btn-ghost normal-case text-xl font-thin flex justify-center" to="/shop" v-if="!searchbar">
-              <img class="h-12" :src="`/${(themeStore.colorMode.preference === 'dark') ? 'logo.png' : 'logo_dark.png' }`" alt="The Crowned Lion">
-            </NuxtLink>
           </div>
 
           <!-- Navbar End -->
@@ -256,25 +228,6 @@ onMounted(() => {
               </label>
             </div>
             <div class="flex">
-              <!-- Cart -->
-              <div class="dropdown dropdown-end btn btn-ghost btn-circle">
-                <label tabindex="0" class="btn btn-ghost btn-circle">
-                  <div class="indicator">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
-                    <span class="badge badge-primary badge-sm indicator-item">{{ cartStore.items.length }}</span>
-                  </div>
-                </label>
-                <div tabindex="0" class="mt-3 z-[1] card card-compact dropdown-content w-52 bg-base-100/80 backdrop-blur-xl shadow">
-                  <div class="card-body">
-                    <span class="font-bold text-lg">{{ cartStore.items.length }} Produkte</span>
-                    <span class="text-accent">Total: {{ cartStore.calcTotal() }}€</span>
-                    <div class="card-actions">
-                      <button class="btn btn-primary btn-block" @click="router.push('/shop/cart')">Warenkorb</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <!-- Account -->
               <NuxtLink class="btn btn-ghost btn-circle" to="/login" v-if="status === 'unauthenticated'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
@@ -287,6 +240,7 @@ onMounted(() => {
                 </label>
                 <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                   <li v-if="userStore.isAdmin"><NuxtLink to="/admin">Admin</NuxtLink></li>
+                  <li v-if="userStore.isAdmin"><NuxtLink to="/admin/user">User</NuxtLink></li>
                   <!-- <li><NuxtLink to="/settings">Settings</NuxtLink></li> -->
                   <li><button @click="logout()">Logout</button></li>
                 </ul>
@@ -302,7 +256,7 @@ onMounted(() => {
         >
           <div class="divider container mx-auto -my-1 w-64"></div>
           <div class="w-full pt-1 flex justify-center">
-            <NuxtLink class="dropdown px-2 hover:text-accent hover:font-bold text-sm text-center" :to="`/shop/${category.slug}`" v-for="category in categoriesStore.categories">{{ category.name }}</NuxtLink>
+            <!-- <NuxtLink class="dropdown px-2 hover:text-accent hover:font-bold text-sm text-center" :to="`/shop/${category.slug}`" v-for="category in categoriesStore.categories">{{ category.name }}</NuxtLink> -->
           </div>
         </div>
 
@@ -327,108 +281,6 @@ onMounted(() => {
                 Hub
               </a>
             </li> -->
-            <li>
-              <details open>
-                <summary>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8.5 9 12l-3.5 3.5L2 12l3.5-3.5Z"/><path d="m12 2 3.5 3.5L12 9 8.5 5.5 12 2Z"/><path d="M18.5 8.5 22 12l-3.5 3.5L15 12l3.5-3.5Z"/><path d="m12 15 3.5 3.5L12 22l-3.5-3.5L12 15Z"/></svg>
-                  Shop
-                </summary>
-                <ul>
-                  <li>
-                    <NuxtLink to="/admin/shop">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-                      Übersicht
-                    </NuxtLink>
-                  </li>
-                  <li>
-                    <NuxtLink to="/admin/shop/orders">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
-                      Bestellungen
-                    </NuxtLink>
-                  </li>
-                  <li>
-                    <NuxtLink to="/admin/shop/products">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
-                      Produkte
-                    </NuxtLink>
-                  </li>
-                  <li>
-                    <details open>
-                      <summary>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 17a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3.9a2 2 0 0 1-1.69-.9l-.81-1.2a2 2 0 0 0-1.67-.9H8a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2Z"/><path d="M2 8v11a2 2 0 0 0 2 2h14"/></svg>
-                        Kategorien
-                      </summary>
-                      <ul>
-                        <li>
-                          <NuxtLink :to="`/admin/shop/categories/new`">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                            Hinzufügen
-                          </NuxtLink>
-                        </li>
-                        <li>
-                          <NuxtLink to="/admin/shop/categories">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
-                            Alle
-                          </NuxtLink>
-                        </li>
-                        <li v-for="category in categoriesStore.categories">
-                          <details class="bg-base-200 rounded rounded-xl m-1 max-w-sm">
-                            <summary>
-                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
-                              {{ category.name }}
-                            </summary>
-                            <ul>
-                              <li>
-                                <NuxtLink :to="`/admin/shop/categories/edit/${category.slug}`">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-                                  Bearbeiten
-                                </NuxtLink>
-                              </li>
-                              <li>
-                                <NuxtLink :to="`/admin/shop/categories/${category.slug}/new`">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                                  Hinzufügen
-                                </NuxtLink>
-                              </li>
-                              <li>
-                                <NuxtLink :to="`/admin/shop/categories/${category.slug}`">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
-                                  Alle
-                                </NuxtLink>
-                              </li>
-                              <li v-for="subcategory in category.subcategories">
-                                <NuxtLink :to="`/admin/shop/categories/${category.slug}/edit/${subcategory}`">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
-                                  {{ subcategory }}
-                                </NuxtLink>
-                              </li>
-                            </ul>
-                          </details>
-                        </li>
-                      </ul>
-                    </details>
-                  </li>
-                  <li>
-                    <NuxtLink to="/admin/shop/clients">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><circle cx="12" cy="8" r="2"/><path d="M15 13a3 3 0 1 0-6 0"/></svg>
-                      Kunden
-                    </NuxtLink>
-                  </li>
-                  <li>
-                    <NuxtLink to="/admin/shop/coupons">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="M9 9h.01"/><path d="M15 15h.01"/></svg>
-                      Coupons
-                    </NuxtLink>
-                  </li>
-                  <!-- <li>
-                    <a>
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                      Coupons
-                    </a>
-                  </li> -->
-                </ul>
-              </details>
-            </li>
             <li>
               <NuxtLink to="/admin/user">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>

@@ -35,7 +35,7 @@ const router = useRouter()
             <h2 class="card-title">Shop</h2>
             <p>Verwalte den Content deines <br><b>Online Shops</b>!</p>
             <div class="card-actions justify-end">
-              <NuxtLink class="btn" to="/admin/shop">Enter</NuxtLink>
+              <NuxtLink class="btn" to="/admin/shop">Install</NuxtLink>
             </div>
           </div>
         </div>

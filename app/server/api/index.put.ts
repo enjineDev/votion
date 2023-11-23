@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid'
+// Import the Product interface
 import { getServerSession } from '#auth'
 
 export default defineEventHandler(async (event) => {
@@ -20,32 +20,21 @@ export default defineEventHandler(async (event) => {
         statusMessage: 'Permission denied',
       })
     }
-
     // Get User
     const user = await databaseManager.getUserByMail(session.user.email)
+    const { data } = await readBody(event)
 
-    // Check if the product with the given ID exists
-    const notesExists = await notesDatabase.exists(user.id)
+    data.updated = new Date().toISOString()
 
-    if (!notesExists) {
-      const id = uuid()
-      const created = new Date().toISOString()
-      const updated = created
-      const pages = [{
-        name: '🗃 Home',
-        slug: '',
-        blocks:[{
-          id: uuid(),
-          type: 'TEXT',
-          details: {
-            value: 'Add some notes!'
-          },
-        }],
-      }]
-      await notesDatabase.put(user.id, { id, created, updated, pages })
-    }
     const note = await notesDatabase.get(user.id)
-    return note.pages.find(n => n.slug === '')
+    console.log(note);
+    const pages = note.pages.filter(block => block.slug !== data.slug)
+    pages.push(data)
+    note.pages = pages
+
+    // Update the product in the database
+    await notesDatabase.put(user.id, note)
+    return true
   } catch (error) {
     throw createError({
       statusCode: 400,

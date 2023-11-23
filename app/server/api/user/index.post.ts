@@ -21,11 +21,11 @@ export default defineEventHandler(async (event) => {
     data.updated = new Date().toISOString()
 
     // Encrypt User Password
-    const password = {
-      salt: generateSalt(),
-      hash: hashPassword(data.password, data.salt)
-    }
-    data.password = password
+    const salt = generateSalt()
+    const hash = hashPassword(data.password, salt)
+    data.password = { salt, hash }
+    console.log(data);
+
 
     // Add new User
     return await databaseManager.addUser(data)

@@ -95,8 +95,6 @@ export class DatabaseManager {
 
   async getUserByMail(email: string) {
     try {
-      console.log(email);
-
       return await this.userDatabase.find(u => u.email === email)
     } catch (error) {
       throw new Error(error)
