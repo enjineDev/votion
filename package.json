@@ -1,9 +1,9 @@
 {
   "name": "nujin",
   "version": "0.0.1",
-  "engines" : {
-    "npm" : ">=9",
-    "node" : ">=18"
+  "engines": {
+    "npm": ">=9",
+    "node": ">=18"
   },
   "type": "module",
   "scripts": {
@@ -27,6 +27,7 @@
     "sass": "^1.69.5"
   },
   "dependencies": {
+    "@dashibase/lotion": "^0.1.4",
     "@pinia/nuxt": "^0.4.11",
     "@tiptap/extension-character-count": "^2.1.12",
     "@tiptap/extension-subscript": "^2.1.12",
@@ -54,6 +55,7 @@
     "markdown-it-sup": "^1.0.0",
     "next-auth": "4.18.8",
     "nodemailer": "^6.9.7",
+    "oh-vue-icons": "^1.0.0-rc3",
     "scss": "^0.2.4",
     "tailwindcss-hero-patterns": "^0.1.2",
     "vue-chartjs": "^5.2.0"
