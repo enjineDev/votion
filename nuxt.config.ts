@@ -2,6 +2,9 @@
 export default defineNuxtConfig({
   title: 'Votion',
   srcDir: './app',
+  devServer: {
+    port: 3001,
+  },
   ssr: false,
   modules: [
     '@vueuse/nuxt',
