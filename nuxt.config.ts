@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@pinia/nuxt',
     'nuxt-lucide-icons',
+    '@kevinmarrec/nuxt-pwa'
   ],
   plugins: [
     { src: '~/plugins/aos.ts', mode: 'client' },
@@ -65,9 +66,9 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
-      name: 'The Crowned Lion',
-      short_name: 'CrownedLion',
-      theme_color: '#66cc8a',
+      name: 'Votion',
+      short_name: 'Votion',
+      theme_color: '#fff',
       icons: [
         {
           src: 'favicon.png',

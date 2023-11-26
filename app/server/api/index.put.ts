@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
     data.updated = new Date().toISOString()
 
     const note = await notesDatabase.get(user.id)
-    console.log(note);
+
     const pages = note.pages.filter(block => block.slug !== data.slug)
     pages.push(data)
     note.pages = pages
