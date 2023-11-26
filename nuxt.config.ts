@@ -8,7 +8,6 @@ export default defineNuxtConfig({
   ssr: false,
   modules: [
     '@vueuse/nuxt',
-    '@vite-pwa/nuxt',
     '@sidebase/nuxt-auth',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
