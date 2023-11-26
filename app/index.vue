@@ -13,7 +13,6 @@ onCreated(() => {
 
 <template>
   <div class="prose lg:prose-xl">
-    <VitePwaManifest />
     <NuxtLayout>
       <NuxtPage/>
     </NuxtLayout>
